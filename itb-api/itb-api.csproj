@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>itb_api</RootNamespace>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.15" />
+    <PackageReference Include="MongoDB.Driver" Version="2.12.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Release\web.config" />
+    <_ContentIncludedByDefault Remove="Release\appsettings.Development.json" />
+    <_ContentIncludedByDefault Remove="Release\appsettings.json" />
+    <_ContentIncludedByDefault Remove="Release\itb-api.deps.json" />
+    <_ContentIncludedByDefault Remove="Release\itb-api.runtimeconfig.json" />
+  </ItemGroup>
+
+
+</Project>
