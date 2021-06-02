@@ -1,0 +1,335 @@
+@startuml
+class Startup {
+    + Startup(configuration:IConfiguration)
+    + Configuration : IConfiguration <<get>>
+    + ConfigureServices(services:IServiceCollection) : void
+    + Configure(app:IApplicationBuilder, env:IWebHostEnvironment) : void
+}
+class Program {
+    + {static} Main(args:string[]) : void
+    + {static} CreateHostBuilder(args:string[]) : IHostBuilder
+}
+class StatisticsController {
+    - <<readonly>> _logger : ILogger<StatisticsController>
+    - <<readonly>> _statisticsService : IStatisticService
+    + StatisticsController(logger:ILogger<StatisticsController>, statisticsService:IStatisticService)
+    + <<async>> ReadStatistic(username1:string, username2:string?) : Task<IActionResult>
+}
+ControllerBase <|-- StatisticsController
+class ChatsController {
+    - <<readonly>> _logger : ILogger<ChatsController>
+    - <<readonly>> _chatService : IChatService
+    + ChatsController(logger:ILogger<ChatsController>, chatService:IChatService)
+    + <<async>> CreateChat(update:CreateChatRequestBody) : Task<IActionResult>
+    + <<async>> ReadChat(id:long) : Task<IActionResult>
+    + <<async>> UpdateChat(id:long, update:UpdateChatRequestBody) : Task<IActionResult>
+    + <<async>> DeleteChat(id:long) : Task<IActionResult>
+}
+ControllerBase <|-- ChatsController
+class ChatsCollection {
+    + Id : ObjectId <<get>> <<set>>
+    + ChatId : long <<get>> <<set>>
+    + Username : string? <<get>> <<set>> = null
+    + Path : string? <<get>> <<set>> = null
+    + State : string? <<get>> <<set>> = null
+    + CreatedAt : DateTime <<get>> <<set>>
+    + UpdatedAt : DateTime <<get>> <<set>>
+}
+class StatisticsCollection {
+    + Id : ObjectId <<get>> <<set>>
+    + Username : string <<get>> <<set>>
+    + AvatarUrl : string <<get>> <<set>>
+    + PostsCount : int <<get>> <<set>>
+    + FollowedBy : int <<get>> <<set>>
+    + Follows : int <<get>> <<set>>
+    + Posts : List<StatisticsPostsCollection> <<get>> <<set>>
+    + CreatedAt : DateTime <<get>> <<set>>
+    + UpdatedAt : DateTime <<get>> <<set>>
+}
+class StatisticsPostsCollection {
+    + LikesCount : int <<get>> <<set>>
+    + CommentsCount : int <<get>> <<set>>
+}
+class InstagramConfiguration {
+    + Url : string <<get>> <<set>>
+    + BaseUrl : string <<get>> <<set>>
+    + Cookies : string <<get>> <<set>>
+}
+class DatabaseConfiguration {
+    + Url : string <<get>> <<set>>
+    + User : string <<get>> <<set>>
+    + Password : string <<get>> <<set>>
+    + Name : string <<get>> <<set>>
+}
+class UpdateChatRequestBody {
+    + Username : string? <<get>> <<set>> = null
+    + Path : string? <<get>> <<set>> = null
+    + State : string? <<get>> <<set>> = null
+}
+class CreateChatRequestBody {
+    + ChatId : long <<get>> <<set>>
+    + Username : string? <<get>> <<set>> = null
+    + Path : string? <<get>> <<set>> = null
+    + State : string? <<get>> <<set>> = null
+}
+class GetUserProfileByUsernameResponse {
+    + seo_category_infos : List<List<string>> <<get>> <<set>>
+    + logging_page_id : string <<get>> <<set>>
+    + show_suggested_profiles : bool <<get>> <<set>>
+    + show_follow_dialog : bool <<get>> <<set>>
+    + graphql : Graphql <<get>> <<set>>
+    + toast_content_on_load : object <<get>> <<set>>
+    + show_view_shop : bool <<get>> <<set>>
+    + profile_pic_edit_sync_props : object <<get>> <<set>>
+    + always_show_message_button_to_pro_account : bool <<get>> <<set>>
+}
+class EdgeFollowedBy {
+    + count : int <<get>> <<set>>
+}
+class EdgeFollow {
+    + count : int <<get>> <<set>>
+}
+class EdgeMutualFollowedBy {
+    + count : int <<get>> <<set>>
+    + edges : List<object> <<get>> <<set>>
+}
+class PageInfo {
+    + has_next_page : bool <<get>> <<set>>
+    + end_cursor : object <<get>> <<set>>
+}
+class EdgeFelixCombinedPostUploads {
+    + count : int <<get>> <<set>>
+    + page_info : PageInfo <<get>> <<set>>
+    + edges : List<object> <<get>> <<set>>
+}
+class EdgeFelixCombinedDraftUploads {
+    + count : int <<get>> <<set>>
+    + page_info : PageInfo <<get>> <<set>>
+    + edges : List<object> <<get>> <<set>>
+}
+class EdgeFelixVideoTimeline {
+    + count : int <<get>> <<set>>
+    + page_info : PageInfo <<get>> <<set>>
+    + edges : List<object> <<get>> <<set>>
+}
+class EdgeFelixDrafts {
+    + count : int <<get>> <<set>>
+    + page_info : PageInfo <<get>> <<set>>
+    + edges : List<object> <<get>> <<set>>
+}
+class EdgeFelixPendingPostUploads {
+    + count : int <<get>> <<set>>
+    + page_info : PageInfo <<get>> <<set>>
+    + edges : List<object> <<get>> <<set>>
+}
+class EdgeFelixPendingDraftUploads {
+    + count : int <<get>> <<set>>
+    + page_info : PageInfo <<get>> <<set>>
+    + edges : List<object> <<get>> <<set>>
+}
+class Dimensions {
+    + height : int <<get>> <<set>>
+    + width : int <<get>> <<set>>
+}
+class User {
+    + full_name : string <<get>> <<set>>
+    + id : string <<get>> <<set>>
+    + is_verified : bool <<get>> <<set>>
+    + profile_pic_url : string <<get>> <<set>>
+    + username : string <<get>> <<set>>
+    + biography : string <<get>> <<set>>
+    + blocked_by_viewer : bool <<get>> <<set>>
+    + restricted_by_viewer : bool <<get>> <<set>>
+    + country_block : bool <<get>> <<set>>
+    + external_url : object <<get>> <<set>>
+    + external_url_linkshimmed : object <<get>> <<set>>
+    + edge_followed_by : EdgeFollowedBy <<get>> <<set>>
+    + fbid : string <<get>> <<set>>
+    + followed_by_viewer : bool <<get>> <<set>>
+    + edge_follow : EdgeFollow <<get>> <<set>>
+    + follows_viewer : bool <<get>> <<set>>
+    + has_ar_effects : bool <<get>> <<set>>
+    + has_clips : bool <<get>> <<set>>
+    + has_guides : bool <<get>> <<set>>
+    + has_channel : bool <<get>> <<set>>
+    + has_blocked_viewer : bool <<get>> <<set>>
+    + highlight_reel_count : int <<get>> <<set>>
+    + has_requested_viewer : bool <<get>> <<set>>
+    + hide_like_and_view_counts : bool <<get>> <<set>>
+    + is_business_account : bool <<get>> <<set>>
+    + is_professional_account : bool <<get>> <<set>>
+    + is_joined_recently : bool <<get>> <<set>>
+    + business_contact_method : object <<get>> <<set>>
+    + business_email : object <<get>> <<set>>
+    + business_phone_number : object <<get>> <<set>>
+    + business_category_name : object <<get>> <<set>>
+    + overall_category_name : object <<get>> <<set>>
+    + category_enum : object <<get>> <<set>>
+    + category_name : string <<get>> <<set>>
+    + is_private : bool <<get>> <<set>>
+    + edge_mutual_followed_by : EdgeMutualFollowedBy <<get>> <<set>>
+    + profile_pic_url_hd : string <<get>> <<set>>
+    + requested_by_viewer : bool <<get>> <<set>>
+    + should_show_category : bool <<get>> <<set>>
+    + should_show_public_contacts : bool <<get>> <<set>>
+    + connected_fb_page : object <<get>> <<set>>
+    + edge_felix_combined_post_uploads : EdgeFelixCombinedPostUploads <<get>> <<set>>
+    + edge_felix_combined_draft_uploads : EdgeFelixCombinedDraftUploads <<get>> <<set>>
+    + edge_felix_video_timeline : EdgeFelixVideoTimeline <<get>> <<set>>
+    + edge_felix_drafts : EdgeFelixDrafts <<get>> <<set>>
+    + edge_felix_pending_post_uploads : EdgeFelixPendingPostUploads <<get>> <<set>>
+    + edge_felix_pending_draft_uploads : EdgeFelixPendingDraftUploads <<get>> <<set>>
+    + edge_owner_to_timeline_media : EdgeOwnerToTimelineMedia <<get>> <<set>>
+    + edge_saved_media : EdgeSavedMedia <<get>> <<set>>
+    + edge_media_collections : EdgeMediaCollections <<get>> <<set>>
+}
+class Node {
+    + user : User <<get>> <<set>>
+    + x : double <<get>> <<set>>
+    + y : double <<get>> <<set>>
+    + text : string <<get>> <<set>>
+    + __typename : string <<get>> <<set>>
+    + id : string <<get>> <<set>>
+    + shortcode : string <<get>> <<set>>
+    + dimensions : Dimensions <<get>> <<set>>
+    + display_url : string <<get>> <<set>>
+    + edge_media_to_tagged_user : EdgeMediaToTaggedUser <<get>> <<set>>
+    + fact_check_overall_rating : object <<get>> <<set>>
+    + fact_check_information : object <<get>> <<set>>
+    + gating_info : object <<get>> <<set>>
+    + sharing_friction_info : SharingFrictionInfo <<get>> <<set>>
+    + media_overlay_info : object <<get>> <<set>>
+    + media_preview : string <<get>> <<set>>
+    + owner : Owner <<get>> <<set>>
+    + is_video : bool <<get>> <<set>>
+    + accessibility_caption : string <<get>> <<set>>
+    + edge_media_to_caption : EdgeMediaToCaption <<get>> <<set>>
+    + edge_media_to_comment : EdgeMediaToComment <<get>> <<set>>
+    + comments_disabled : bool <<get>> <<set>>
+    + taken_at_timestamp : int <<get>> <<set>>
+    + edge_liked_by : EdgeLikedBy <<get>> <<set>>
+    + edge_media_preview_like : EdgeMediaPreviewLike <<get>> <<set>>
+    + location : Location <<get>> <<set>>
+    + thumbnail_src : string <<get>> <<set>>
+    + thumbnail_resources : List<ThumbnailResource> <<get>> <<set>>
+    + edge_sidecar_to_children : EdgeSidecarToChildren <<get>> <<set>>
+}
+class Edge {
+    + node : Node <<get>> <<set>>
+}
+class EdgeMediaToTaggedUser {
+    + edges : List<Edge> <<get>> <<set>>
+}
+class SharingFrictionInfo {
+    + should_have_sharing_friction : bool <<get>> <<set>>
+    + bloks_app_url : object <<get>> <<set>>
+}
+class Owner {
+    + id : string <<get>> <<set>>
+    + username : string <<get>> <<set>>
+}
+class EdgeMediaToCaption {
+    + edges : List<Edge> <<get>> <<set>>
+}
+class EdgeMediaToComment {
+    + count : int <<get>> <<set>>
+}
+class EdgeLikedBy {
+    + count : int <<get>> <<set>>
+}
+class EdgeMediaPreviewLike {
+    + count : int <<get>> <<set>>
+}
+class Location {
+    + id : string <<get>> <<set>>
+    + has_public_page : bool <<get>> <<set>>
+    + name : string <<get>> <<set>>
+    + slug : string <<get>> <<set>>
+}
+class ThumbnailResource {
+    + src : string <<get>> <<set>>
+    + config_width : int <<get>> <<set>>
+    + config_height : int <<get>> <<set>>
+}
+class EdgeSidecarToChildren {
+    + edges : List<Edge> <<get>> <<set>>
+}
+class EdgeOwnerToTimelineMedia {
+    + count : int <<get>> <<set>>
+    + page_info : PageInfo <<get>> <<set>>
+    + edges : List<Edge> <<get>> <<set>>
+}
+class EdgeSavedMedia {
+    + count : int <<get>> <<set>>
+    + page_info : PageInfo <<get>> <<set>>
+    + edges : List<Edge> <<get>> <<set>>
+}
+class EdgeMediaCollections {
+    + count : int <<get>> <<set>>
+    + page_info : PageInfo <<get>> <<set>>
+    + edges : List<object> <<get>> <<set>>
+}
+class Graphql {
+    + user : User <<get>> <<set>>
+}
+interface IDatabaseService {
+    + Client : IMongoClient <<get>>
+    + Database : IMongoDatabase <<get>>
+}
+class DatabaseService {
+    + Client : IMongoClient <<get>>
+    + Database : IMongoDatabase <<get>>
+    - <<readonly>> _databaseConfig : DatabaseConfiguration
+    + DatabaseService(databaseConfig:IOptions<DatabaseConfiguration>)
+}
+IDatabaseService <|-- DatabaseService
+interface IChatService {
+    + CreateAsync(chatId:long, username:string?, path:string?, state:string?) : Task<List<ChatsCollection>>
+    + ReadAsync(chatId:long) : Task<List<ChatsCollection>>
+    + UpdateAsync(chatId:long, username:string?, path:string?, state:string?) : Task<List<ChatsCollection>>
+    + DeleteAsync(chatId:long) : Task
+}
+class ChatService {
+    - <<readonly>> _databaseService : IDatabaseService
+    - <<readonly>> _collection : IMongoCollection<ChatsCollection>
+    + ChatService(databaseService:IDatabaseService)
+    + <<async>> CreateAsync(chatId:long, username:string?, path:string?, state:string?) : Task<List<ChatsCollection>>
+    + <<async>> ReadAsync(chatId:long) : Task<List<ChatsCollection>>
+    + <<async>> UpdateAsync(chatId:long, username:string?, path:string?, state:string?) : Task<List<ChatsCollection>>
+    + <<async>> DeleteAsync(chatId:long) : Task
+}
+IChatService <|-- ChatService
+class StatisticService {
+    - <<readonly>> _databaseService : IDatabaseService
+    - <<readonly>> _collection : IMongoCollection<StatisticsCollection>
+    - <<readonly>> _instagramService : IInstagramService
+    + StatisticService(databaseService:IDatabaseService, instagramService:IInstagramService)
+    + <<async>> ReadBulkAsync(username1:string, username2:string?) : Task<List<StatisticsCollection>>
+    + <<async>> CreateAsync(username:string, avatarUrl:string, postsCount:int, followedBy:int, follows:int, posts:List<StatisticsPostsCollection>) : Task<List<StatisticsCollection>>
+    + <<async>> ReadAsync(username:string) : Task<List<StatisticsCollection>>
+    + <<async>> UpdateAsync(username:string, avatarUrl:string, postsCount:int, followedBy:int, follows:int, posts:List<StatisticsPostsCollection>) : Task<List<StatisticsCollection>>
+    + <<async>> DeleteAsync(username:string) : Task
+    - <<async>> ReadOrDownloadStatistic(username:string) : Task<StatisticsCollection>
+    - <<async>> DownloadStatistic(username:string) : Task<StatisticsCollection>
+}
+IStatisticService <|-- StatisticService
+interface IStatisticService {
+    + ReadBulkAsync(username1:string, username2:string?) : Task<List<StatisticsCollection>>
+    + CreateAsync(username:string, avatarUrl:string, postsCount:int, followedBy:int, follows:int, posts:List<StatisticsPostsCollection>) : Task<List<StatisticsCollection>>
+    + ReadAsync(username:string) : Task<List<StatisticsCollection>>
+    + UpdateAsync(username:string, avatarUrl:string, postsCount:int, followedBy:int, follows:int, posts:List<StatisticsPostsCollection>) : Task<List<StatisticsCollection>>
+    + DeleteAsync(username:string) : Task
+}
+interface IInstagramService {
+    + GetUserProfileByUsernameAsync(username:string) : Task<GetUserProfileByUsernameResponse>
+}
+class InstagramService {
+    - <<readonly>> _logger : ILogger<InstagramService>
+    - <<readonly>> _instagramConfig : InstagramConfiguration
+    - <<readonly>> _cookieContainer : CookieContainer
+    + InstagramService(logger:ILogger<InstagramService>, instagramConfig:IOptions<InstagramConfiguration>)
+    + <<async>> GetUserProfileByUsernameAsync(username:string) : Task<GetUserProfileByUsernameResponse>
+    - _applyCookies() : void
+}
+IInstagramService <|-- InstagramService
+@enduml
